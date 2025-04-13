@@ -14,11 +14,11 @@ dados_transacao['dt_transacao'] = pd.to_datetime(dados_transacao['dt_transacao']
 dados_transacao['dt_transacao']
 
 # %%
-# Criando colunas com lista dos valor das parcelas
+# Criando coluna contendo uma lista com o valor das parcelas
 dados_transacao['valor_parcela'] = dados_transacao.apply(lambda row: [row['valor']/row['qtd_parcelas'] for i in range(row['qtd_parcelas'])], axis = 1)
 
 # %%
-# Aplicando função explode para explodir valor para parcela para cada transação a depender da quantidade de parcelas
+# Aplicando função explode para expandir o valor para parcela para cada transação
 dados_fatura = dados_transacao.explode('valor_parcela')
 
 # Removendo colunas desnecessárias
@@ -35,7 +35,7 @@ dados_fatura['mes_add'] = dados_fatura.groupby('id_transacao')['dt_transacao']\
 dados_fatura
 
 # %%
-# Criando função para adicionar nova data que adciona um mês para frente
+# Criando função para calculo da data da fatura
 def add_meses(row):
     dias_por_mes = 31
     nova_data = row['dt_transacao'] + np.timedelta64(row['mes_add'] * dias_por_mes, 'D')
